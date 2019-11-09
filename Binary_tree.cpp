@@ -32,23 +32,39 @@ void Search_BST(NODE*);
 void Preorder(NODE*);
 void Inorder(NODE*);
 void Postorder(NODE*);
+int Height_BST(NODE*);
+int CountNode_BST(NODE*);
+int Internal_BST(NODE*);
+int External_BST(NODE*);
+int LargestNode_BST(NODE*);
+int SmallestNode_BST(NODE*);
+NODE* MirrorImage_BST(NODE*);
+NODE* DeleteNode_BST(NODE*);
 NODE* Delete_BST(NODE*);
 
 int main()
 {
-	int ch;
+	int ch,n;
 	printf("*****Binary Search Tree Operations*****\n");
 	printf("1. Insert a node\n");
 	printf("2. Searching a node\n");
 	printf("3. Preorder Traversal\n");
 	printf("4. Inorder Traversal\n");
 	printf("5. Postorder Traversal\n");
-	printf("6. Delete a node\n");
-	printf("7. Exit\n");
+	printf("6. Height of Binary Search Tree\n");
+	printf("7. Number of Nodes in Binary Search Tree\n");
+	printf("8. Number of Internal Nodes in Binary Search Tree\n");
+	printf("9. Number of External Nodes in Binary Search Tree\n");
+	printf("10. Largest Node in Binary Search Tree\n");
+	printf("11. Smallest Node in Binary Search Tree\n");
+	printf("12. Mirror Image of Binary Search Tree\n");
+	printf("13. Delete a node\n");
+	printf("14. Delete Complete Binary Search Tree\n");
+	printf("15. Exit\n");
 	do{
 	printf("\nEnter Your Choice: ");
 	scanf("%d",&ch);
-	
+
 	switch(ch)
 	{
 		case 1: root = Insert_BST(root);
@@ -64,12 +80,34 @@ int main()
 		case 5: Postorder(root);
 		        printf("\n");
 		        break;
-		case 6: root = Delete_BST(root);
+		case 6: n=Height_BST(root);
+		        printf("Height of Binary Search Tree is %d\n",n);
+                break;
+        case 7: n=CountNode_BST(root);
+                printf("Number of Nodes in Binary Search Tree is %d\n",n);
+                break;
+        case 8: n=Internal_BST(root);
+                printf("Number of Internal Nodes in Binary Search Tree is %d\n",n);
+                break;
+        case 9: n=External_BST(root);
+                printf("Number of External Nodes in Binary Search Tree is %d\n",n);
+                break;
+        case 10: n=LargestNode_BST(root);
+                printf("Largest Node in Binary Search Tree is %d\n",n);
+                break;
+        case 11: n=SmallestNode_BST(root);
+                printf("Smallest Node in Binary Search Tree is %d\n",n);
+                break;
+        case 12: root = MirrorImage_BST(root);
     	        break;
-		case 7: printf("Thanks For Using This Amazing Program!!\n");
+		case 13: root = DeleteNode_BST(root);
+    	        break;
+    	case 14: root = Delete_BST(root);
+    	        break;
+		case 15: printf("Thanks For Using This Amazing Program!!\n");
 		        exit(0);
 		        break;
-		default: break;												               				       
+		default: break;
 	}
     }while(1);
     getch();
@@ -89,14 +127,14 @@ NODE* Insert_BST(NODE *root)
 	   	  if(cur->info < temp->info)
 	   	     temp=temp->left;
 	   	  else
-			 temp=temp->right;   
+			 temp=temp->right;
 	    }
 	    if(cur->info < par->info)
 	      par->left=cur;
 		else
 		  par->right=cur;
 	}
-	return root;	       
+	return root;
 }
 
 void Search_BST(NODE *root)
@@ -115,7 +153,7 @@ void Search_BST(NODE *root)
 	      if(skey < temp->info)
 		     temp=temp->left;
 		  else
-		     temp=temp->right;	 	
+		     temp=temp->right;
 	   }
 	   if(temp->info == skey)
 	       {
@@ -163,7 +201,7 @@ void Postorder(NODE *root)
     }
 }
 
-NODE* Delete_BST(NODE *root)
+NODE* DeleteNode_BST(NODE *root)
 {
 	int skey;
 	printf("Enter the node you want to delete: ");
@@ -171,7 +209,7 @@ NODE* Delete_BST(NODE *root)
 	temp=root;
 	if(temp == NULL)
 	  {
-	   printf("Node is not exist\n");	
+	   printf("Node is not exist\n");
       }
 	else
 	{
@@ -181,7 +219,7 @@ NODE* Delete_BST(NODE *root)
 	      if(skey < temp->info)
 		     temp=temp->left;
 		  else
-		     temp=temp->right;	 	
+		     temp=temp->right;
 	   }
 	   if(temp->info == skey)
 	       {
@@ -191,18 +229,18 @@ NODE* Delete_BST(NODE *root)
 		      	if (par->left->info == skey)
 		      	    par->left=NULL;
 		      	else
-				    par->right=NULL;  
+				    par->right=NULL;
 			  }
-			  
+
 			  //case 2: one right child
 			  if(temp->left==NULL && temp->right!=NULL)
 			  {
 			  	if (par->left->info == skey)
 			  	    par->left=temp->right;
 			  	else
-				    par->right=temp->right;    
+				    par->right=temp->right;
 			  }
-			  
+
 			  //case 3: one left child
 			  if(temp->left!=NULL && temp->right==NULL)
 			  {
@@ -211,7 +249,7 @@ NODE* Delete_BST(NODE *root)
 			  	else
 				    par->right=temp->left;
 			  }
-			  
+
 			  //case 4: two both left or right child
 			  if(temp->left!=NULL && temp->right!=NULL)
 			  {
@@ -220,7 +258,7 @@ NODE* Delete_BST(NODE *root)
 			  	while(suc->left!=NULL)
 			  	{
 			  	  parsuc=suc;
-			  	  suc=suc->left;						
+			  	  suc=suc->left;
 				}
 				suc->left=temp->left;
 				temp->left=temp->right=NULL;
@@ -230,15 +268,114 @@ NODE* Delete_BST(NODE *root)
 	   else
 	       printf("Node is not exist\n");
 	}
+	free(temp);
 	return root;
 }
 
+int Height_BST(NODE *root)
+{
+    int leftsubtree,rightsubtree;
+    if(root==NULL)
+        return 0;
+    else
+     {
+        leftsubtree=Height_BST(root->left);
+        rightsubtree=Height_BST(root->right);
+        if(leftsubtree>rightsubtree)
+            return leftsubtree+1;
+        else
+            return rightsubtree+1;
+     }
+}
 
+int CountNode_BST(NODE *root)
+{
+    int leftcountnode,rightcountnode;
+    if(root==NULL)
+        return 0;
+    else
+    {
+        leftcountnode=CountNode_BST(root->left);
+        rightcountnode=CountNode_BST(root->right);
+        return (leftcountnode+rightcountnode+1);
+    }
+}
 
+int Internal_BST(NODE *root)
+{
+    int leftInternalNode,rightInternalNode;
+    if(root==NULL)
+        return 0;
+    if (root->left==NULL && root->right==NULL)
+        return 0;
+    else
+    {
+        leftInternalNode=Internal_BST(root->left);
+        rightInternalNode=Internal_BST(root->right);
+        return leftInternalNode+rightInternalNode+1;
+    }
+}
 
+int External_BST(NODE *root)
+{
+    int leftExternalNode,rightExternalNode;
+    if(root==NULL)
+        return 0;
+    if (root->left==NULL && root->right==NULL)
+        return 1;
+    else
+    {
+        leftExternalNode=External_BST(root->left);
+        rightExternalNode=External_BST(root->right);
+        return leftExternalNode+rightExternalNode;
+    }
+}
 
+int LargestNode_BST(NODE *root)
+{
+    if(root==NULL || root->right==NULL)
+        return root->info;
+    else
+    {
+        return LargestNode_BST(root->right);
+    }
+}
 
+int SmallestNode_BST(NODE *root)
+{
+    if(root==NULL || root->left==NULL)
+        return root->info;
+    else
+    {
+        return SmallestNode_BST(root->left);
+    }
+}
 
+NODE* MirrorImage_BST(NODE *root)
+{
+    if(root!=NULL)
+    {
+        MirrorImage_BST(root->left);
+        MirrorImage_BST(root->right);
+
+        temp=root->left;
+        root->left=root->right;
+        root->right=temp;
+    }
+    return root;
+}
+
+NODE* Delete_BST(NODE *root)
+{
+    if(root!=NULL)
+    {
+        Delete_BST(root->left);
+        Delete_BST(root->right);
+        free(root);
+    }
+    printf("Binary Tree is Sucessfully Deleted\n");
+    return root;
+}
 
 
 
